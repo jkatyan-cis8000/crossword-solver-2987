@@ -89,13 +89,31 @@ class WordValidator:
         expected_char = self._get_expected_char_at(row, col)
         return cell_value.upper() == expected_char.upper()
 
-    def get_errors(self) -> List[Tuple[int, int, str, str]]:
-        """Get list of validation errors.
+    def validate_letter(self, row: int, col: int, char: str) -> bool:
+        """Validate a single letter entry in a cell.
+
+        Args:
+            row: Row index (0-based).
+            col: Column index (0-based).
+            char: The character to validate.
 
         Returns:
-            List of (row, col, expected, actual) tuples for each error.
+            True if the letter is correct for this position, False otherwise.
         """
-        return self._errors.copy()
+        expected_char = self._get_expected_char_at(row, col)
+        return char.upper() == expected_char.upper()
+
+    def get_word_at_position(self, row: int, col: int) -> List[Tuple[int, str]]:
+        """Get words that contain a specific cell position.
+
+        Args:
+            row: Row index (0-based).
+            col: Column index (0-based).
+
+        Returns:
+            List of (clue_number, direction) tuples for words at this position.
+        """
+        return self.puzzle_config.get_word_at_position(row, col)
 
     def validate_full_puzzle(self) -> Tuple[bool, List[Tuple[int, int, str, str]]]:
         """Validate the entire puzzle.
@@ -124,6 +142,14 @@ class WordValidator:
                     all_errors.append((cell_row, cell_col, expected_char, actual_char or ''))
 
         return len(all_errors) == 0, all_errors
+
+    def get_errors(self) -> List[Tuple[int, int, str, str]]:
+        """Get list of validation errors.
+
+        Returns:
+            List of (row, col, expected, actual) tuples for each error.
+        """
+        return self._errors.copy()
 
     def _get_expected_char_at(self, row: int, col: int) -> str:
         """Get the expected character at a cell.

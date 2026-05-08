@@ -72,6 +72,18 @@ class GameState:
         """
         return self.grid[row][col] is not None
 
+    def is_black_square(self, row: int, col: int) -> bool:
+        """Check if a cell is a black square.
+
+        Args:
+            row: Row index (0-based).
+            col: Column index (0-based).
+
+        Returns:
+            True if the cell is a black square.
+        """
+        return self.puzzle_config.is_black_square(row, col)
+
     def get_filled_word(self, clue_number: int, direction: str) -> str:
         """Get the currently filled word for a clue.
 
